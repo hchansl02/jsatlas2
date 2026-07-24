@@ -279,31 +279,34 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     setIsLoading(true);
     setErrorMsg('');
-
+  
     try {
       const fullEmail = `${username.trim()}@jyatlas.com`;
-
+  
       const { data, error } = await supabase.auth.signInWithPassword({
         email: fullEmail,
         password,
       });
-
+  
       if (error) {
         setErrorMsg('아이디 또는 비밀번호가 일치하지 않습니다.');
         setIsLoading(false);
         return;
       }
-
+  
       if (data.session) {
-        router.push('/home');
-        router.refresh();
+        window.location.href = '/home';
+        return;
       }
-    } catch {
+  
+      setErrorMsg('로그인 세션을 생성하지 못했습니다.');
+    } catch (err) {
+      console.error(err);
       setErrorMsg('로그인 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
