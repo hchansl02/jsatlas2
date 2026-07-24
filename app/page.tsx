@@ -5,19 +5,283 @@ import { useRouter } from 'next/navigation';
 import { Dancing_Script, Merriweather } from 'next/font/google';
 import { supabase } from '@/app/lib/supabase';
 
-const dancingScript = Dancing_Script({ subsets: ['latin'] });
-const merriweather = Merriweather({ subsets: ['latin'], weight: ['400', '700'] });
+const dancingScript = Dancing_Script({
+  subsets: ['latin'],
+});
+
+const merriweather = Merriweather({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
+
+function PlaneIcon({
+  className = '',
+  strokeWidth = 1.7,
+}: {
+  className?: string;
+  strokeWidth?: number;
+}) {
+  return (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 2L11 13" />
+      <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+    </svg>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg
+      className="h-[18px] w-[18px]"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+    >
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5.5 20c.7-4 3-6 6.5-6s5.8 2 6.5 6" />
+    </svg>
+  );
+}
+
+function LockIcon() {
+  return (
+    <svg
+      className="h-[18px] w-[18px]"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+    >
+      <rect x="5" y="10" width="14" height="11" rx="2" />
+      <path d="M8 10V7a4 4 0 018 0v3" />
+    </svg>
+  );
+}
+
+function EyeIcon({ closed }: { closed: boolean }) {
+  return (
+    <svg
+      className="h-[19px] w-[19px]"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {closed ? (
+        <>
+          <path d="M3 3l18 18" />
+          <path d="M10.6 10.6a2 2 0 002.8 2.8" />
+          <path d="M9.9 4.2A10.5 10.5 0 0112 4c5.5 0 9 6 9 8a10.8 10.8 0 01-2 3.1" />
+          <path d="M6.3 6.3C4.1 7.8 3 10.3 3 12c0 2 3.5 8 9 8a9.7 9.7 0 004-.8" />
+        </>
+      ) : (
+        <>
+          <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+          <circle cx="12" cy="12" r="2.5" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+function EnvelopeDecoration() {
+  return (
+    <div className="pointer-events-none absolute -left-[120px] top-[49%] hidden h-[420px] w-[510px] -translate-y-1/2 -rotate-[11deg] xl:block">
+      <div className="absolute inset-0 rounded-[8px] bg-white shadow-[0_25px_45px_rgba(56,84,120,0.18)]">
+        {/* 우편 줄무늬 */}
+        <div className="airmail-strip absolute left-0 right-0 top-0 h-[16px]" />
+        <div className="airmail-strip absolute bottom-0 left-0 right-0 h-[16px]" />
+
+        <div className="airmail-strip-vertical absolute bottom-0 left-0 top-0 w-[16px]" />
+        <div className="airmail-strip-vertical absolute bottom-0 right-0 top-0 w-[16px]" />
+
+        {/* 봉투 접힌 선 */}
+        <svg
+          className="absolute inset-0 h-full w-full text-[#d9dee8]"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.45"
+        >
+          <path d="M0 0 L50 57 L100 0" />
+          <path d="M0 100 L38 57" />
+          <path d="M100 100 L62 57" />
+        </svg>
+
+        {/* 우편 스탬프 */}
+        <div className="absolute left-[74px] top-[92px] flex h-[112px] w-[112px] -rotate-[8deg] items-center justify-center rounded-full border-[2px] border-[#2d78d1]/60 text-[#2d78d1]">
+          <div className="flex h-[96px] w-[96px] flex-col items-center justify-center rounded-full border border-dashed border-[#2d78d1]/70">
+            <PlaneIcon className="mb-1 h-7 w-7" strokeWidth={1.5} />
+            <span className="text-[8px] tracking-[0.22em]">OUR TRIP</span>
+            <span className={`${merriweather.className} mt-1 text-[14px] font-bold`}>
+              JS ATLAS
+            </span>
+          </div>
+        </div>
+
+        <div className="absolute left-[172px] top-[128px] flex flex-col gap-[8px] opacity-40">
+          <span className="h-[1px] w-[110px] bg-[#2d78d1]" />
+          <span className="h-[1px] w-[115px] bg-[#2d78d1]" />
+          <span className="h-[1px] w-[105px] bg-[#2d78d1]" />
+          <span className="h-[1px] w-[112px] bg-[#2d78d1]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BoardingPass() {
+  return (
+    <div className="pointer-events-none absolute right-[5%] top-[25%] hidden w-[420px] -rotate-[5deg] overflow-hidden rounded-[10px] bg-white shadow-[0_22px_40px_rgba(46,83,127,0.20)] xl:block">
+      <div className="flex h-[55px] items-center justify-between bg-[#2478c9] px-7 text-white">
+        <div className="flex items-center gap-2">
+          <PlaneIcon className="h-5 w-5" />
+          <span className="text-[15px] font-bold tracking-[0.08em]">
+            BOARDING PASS
+          </span>
+        </div>
+
+        <span className="text-[13px] font-medium">JS ♡</span>
+      </div>
+
+      <div className="relative flex min-h-[190px] bg-white px-7 py-6">
+        <div className="flex flex-1 flex-col justify-between">
+          <div>
+            <p className="text-[9px] font-bold tracking-[0.14em] text-gray-400">
+              FROM
+            </p>
+            <p className="mt-1 text-[20px] font-bold text-[#273343]">
+              우리의 오늘
+            </p>
+          </div>
+
+          <div>
+            <p className="text-[9px] font-bold tracking-[0.14em] text-gray-400">
+              TO
+            </p>
+            <p className="mt-1 text-[20px] font-bold text-[#273343]">
+              함께하는 내일
+            </p>
+          </div>
+        </div>
+
+        <div className="mx-6 border-l border-dashed border-gray-300" />
+
+        <div className="flex w-[100px] flex-col justify-between">
+          <div>
+            <p className="text-[9px] font-bold tracking-[0.14em] text-gray-400">
+              SEAT
+            </p>
+            <p className="mt-1 text-[18px] font-bold text-[#273343]">07A</p>
+          </div>
+
+          <div>
+            <p className="text-[9px] font-bold tracking-[0.14em] text-gray-400">
+              DATE
+            </p>
+            <p className="mt-1 text-[16px] font-bold text-[#273343]">
+              FOREVER
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-6 px-7 pb-6">
+        <div className="barcode h-[29px] w-[125px]" />
+
+        <span className="whitespace-nowrap text-[8px] font-semibold tracking-[-0.02em] text-gray-500">
+          MEMORIES WE COLLECT TOGETHER
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function PlaneRoute() {
+  return (
+    <div className="pointer-events-none absolute right-[5%] top-[3%] hidden h-[195px] w-[500px] xl:block">
+      <svg
+        className="absolute inset-0 h-full w-full overflow-visible"
+        viewBox="0 0 500 190"
+        fill="none"
+      >
+        <path
+          d="M20 143
+             C65 152, 90 130, 93 102
+             C95 68, 46 65, 48 103
+             C51 142, 113 152, 161 130
+             C210 109, 241 71, 286 69
+             C332 67, 349 89, 380 82
+             C421 72, 435 39, 486 36"
+          stroke="#4b98e9"
+          strokeWidth="2"
+          strokeDasharray="6 6"
+          opacity=".65"
+        />
+      </svg>
+
+      <div className="absolute right-[102px] top-[22px] rotate-[18deg] text-[#1876d1]">
+        <svg
+          width="55"
+          height="55"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M21.5 15.4v-2l-8-5.1V3.1c0-.8-.6-1.4-1.5-1.4-.8 0-1.5.6-1.5 1.4v5.2l-8 5.1v2l8-2.6v5l-2.2 1.7v1.7l3.7-1.1 3.7 1.1v-1.7l-2.2-1.7v-5l8 2.6Z" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function TravelPostcard() {
+  return (
+    <div className="pointer-events-none absolute bottom-[7%] right-[9%] hidden rotate-[6deg] xl:block">
+      <div className="stamp-edge relative w-[230px] bg-white p-[15px] shadow-[0_18px_30px_rgba(55,85,125,0.18)]">
+        <img
+          src="/jsatlas-santorini.png"
+          alt=""
+          className="h-[170px] w-full object-cover"
+        />
+      </div>
+
+      <div className="absolute -bottom-[35px] -left-[62px] flex h-[105px] w-[105px] -rotate-[10deg] items-center justify-center rounded-full border-[3px] border-[#2876c5]/60 bg-[#dceeff]/55 text-[#2876c5]">
+        <div className="flex h-[88px] w-[88px] flex-col items-center justify-center rounded-full border border-dashed border-[#2876c5]/60">
+          <span className="text-[8px] tracking-[0.15em]">LOVETRIP</span>
+          <span className="mt-1 text-[17px] font-bold">MEMORIES</span>
+          <span className="text-[12px]">♡</span>
+          <span className="text-[7px] tracking-[0.12em]">TOGETHER</span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function LoginPage() {
   const router = useRouter();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // 로그인 버튼을 눌렀을 때 실행되는 함수
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setIsLoading(true);
     setErrorMsg('');
 
@@ -37,195 +301,242 @@ export default function LoginPage() {
 
       if (data.session) {
         router.push('/home');
-        setIsLoading(false);
+        router.refresh();
       }
-    } catch (err) {
+    } catch {
       setErrorMsg('로그인 중 오류가 발생했습니다.');
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-[#b8d6f5] via-[#d6e7f9] to-[#eaf2fb] flex items-center justify-center p-4 overflow-hidden">
-      
-      {/* 뭉게구름 배경 효과 */}
-      <div className="absolute top-[-5%] left-[-5%] w-[300px] md:w-[500px] h-[350px] bg-white/90 blur-[70px] rounded-full pointer-events-none z-0"></div>
-      <div className="absolute top-[10%] right-[5%] w-[300px] md:w-[600px] h-[300px] bg-white/95 blur-[80px] rounded-full pointer-events-none z-0"></div>
-      <div className="absolute bottom-[-10%] left-[25%] w-[400px] md:w-[800px] h-[400px] bg-white/90 blur-[90px] rounded-full pointer-events-none z-0"></div>
+    <main className="flex min-h-screen flex-col overflow-hidden bg-[#edf6ff]">
+      {/* ================= HEADER ================= */}
+      <header className="relative z-30 flex h-[86px] shrink-0 items-center border-b border-[#dbeaf8] bg-white/95 px-8 shadow-[0_3px_15px_rgba(50,90,130,0.04)] md:px-[6%]">
+        <div className="flex items-center gap-3 text-[#267ad0]">
+          <PlaneIcon className="h-[34px] w-[34px] -rotate-[10deg]" strokeWidth={1.35} />
 
-      {/* 1. 왼쪽 편지 봉투 장식 (줄무늬 깨짐 현상 수정 완료) */}
-      <div className="absolute top-[65%] -translate-y-1/2 -left-80 xl:-left-56 w-[650px] h-[480px] -rotate-12 z-0 hidden lg:block shadow-2xl pointer-events-none">
-        <div className="absolute inset-0 bg-white rounded-2xl overflow-hidden border border-gray-200">
-          <div className="absolute inset-0 p-3 bg-[#fafafa]">
-            <div className="w-full h-full bg-[#fafafa] rounded relative overflow-hidden flex items-center justify-center shadow-inner">
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute top-0 left-0 w-full h-[60%] text-gray-300 opacity-50" fill="none" stroke="currentColor" strokeWidth="0.5">
-                 <path d="M0,0 L50,100 L100,0" />
-              </svg>
-              <div className="absolute top-12 left-12 w-[110px] h-[110px] rounded-full border-2 border-[#3a6bb5] flex flex-col items-center justify-center opacity-80 -rotate-12 bg-[#fafafa]">
-                <div className="w-[94px] h-[94px] rounded-full border-2 border-dashed border-[#3a6bb5] flex flex-col items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-1 text-[#3a6bb5]">
-                    <path d="M22 2L11 13"></path>
-                    <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-                  </svg>
-                  <span className="text-[11px] font-bold text-[#3a6bb5] tracking-widest mt-1">JS ATLAS</span>
+          <span
+            className={`${merriweather.className} text-[26px] font-bold tracking-[-0.02em]`}
+          >
+            JS ATLAS
+          </span>
+        </div>
+      </header>
+
+      {/* ================= MAIN BACKGROUND ================= */}
+      <section className="travel-sky relative flex min-h-[720px] flex-1 items-center justify-center overflow-hidden px-4 py-10">
+        {/* 은은한 지도 질감 */}
+        <div className="map-lines pointer-events-none absolute inset-0 opacity-[0.13]" />
+
+        {/* 구름 */}
+        <div className="cloud cloud-one" />
+        <div className="cloud cloud-two" />
+        <div className="cloud cloud-three" />
+        <div className="cloud cloud-four" />
+
+        <EnvelopeDecoration />
+        <BoardingPass />
+        <PlaneRoute />
+        <TravelPostcard />
+
+        {/* ================= LOGIN CARD ================= */}
+        <div className="relative z-20 w-full max-w-[550px]">
+          <div className="rounded-[25px] border border-white/90 bg-white/88 p-[8px] shadow-[0_20px_55px_rgba(54,91,137,0.20)] backdrop-blur-[12px]">
+            <form
+              onSubmit={handleLogin}
+              className="rounded-[20px] border border-dashed border-[#bcd8f4] bg-white/82 px-8 py-9 md:px-[50px] md:py-[42px]"
+            >
+              {/* 제목 */}
+              <div className="text-center">
+                <p
+                  className={`${dancingScript.className} mb-1 text-[18px] tracking-[0.02em] text-[#5598e3]`}
+                >
+                  journey together, letters forever... ♡
+                </p>
+
+                <h1
+                  className={`${merriweather.className} text-[38px] font-bold tracking-[-0.04em] text-[#1f6fc0] md:text-[43px]`}
+                >
+                  Welcome Aboard
+                </h1>
+
+                <p className="mt-3 text-[14px] font-medium text-[#667587]">
+                  함께 떠나는 여행의 첫걸음, 로그인하세요. ♡
+                </p>
+
+                <div className="my-5 flex items-center justify-center gap-3 text-[#81b8ec]">
+                  <span className="h-px w-[105px] border-t border-dashed border-[#b6d6f3]" />
+                  <PlaneIcon className="h-[21px] w-[21px]" strokeWidth={1.4} />
+                  <span className="h-px w-[105px] border-t border-dashed border-[#b6d6f3]" />
                 </div>
               </div>
-              <div className="absolute top-[85px] left-[130px] flex flex-col gap-2 opacity-60">
-                <div className="w-24 h-[1.5px] bg-[#3a6bb5]"></div>
-                <div className="w-24 h-[1.5px] bg-[#3a6bb5]"></div>
-                <div className="w-24 h-[1.5px] bg-[#3a6bb5]"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* 중앙(로그인) 및 오른쪽(보딩패스) 컨테이너 */}
-      <div className="flex flex-row items-center justify-center lg:justify-end gap-16 xl:gap-24 w-full max-w-[1400px] relative z-10 lg:pl-32 xl:pl-40">
-        
-        {/* 2. 중앙 로그인 카드 */}
-        <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-[420px] p-2 shrink-0">
-          <form onSubmit={handleLogin} className="border border-dashed border-[#a4c2f4] rounded-[1.5rem] p-6 md:p-8 flex flex-col gap-5 bg-white/90 backdrop-blur-sm">
-            <div className="text-center mt-2">
-              <p className={`${dancingScript.className} text-[#3a6bb5] text-lg md:text-xl mb-1 tracking-wider`}>
-                journey together, letters forever... ♡
-              </p>
-              <h1 className={`${merriweather.className} text-3xl md:text-4xl font-bold text-[#1e56a0] mb-2 md:mb-3`}>
-                Welcome Aboard
-              </h1>
-              <p className="text-gray-500 text-xs md:text-sm">
-                함께 떠나는 여행의 첫 걸음, 로그인하세요. ♡
-              </p>
-              <div className="flex justify-center mt-3 text-[#a4c2f4]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 2L11 13"></path>
-                  <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-                </svg>
-              </div>
-            </div>
+              {/* 아이디 */}
+              <div className="mt-2">
+                <label
+                  htmlFor="username"
+                  className="mb-2 block text-[13px] font-semibold text-[#495666]"
+                >
+                  아이디
+                </label>
 
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-gray-700 ml-1">아이디</label>
                 <div className="relative">
-                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                  <div className="pointer-events-none absolute left-[16px] top-1/2 -translate-y-1/2 text-[#a0a9b5]">
+                    <UserIcon />
+                  </div>
+
                   <input
+                    id="username"
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="아이디를 입력하세요"
                     required
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#3a6bb5] transition-all text-sm placeholder:text-gray-400 text-gray-800"
+                    autoComplete="username"
+                    className="h-[51px] w-full rounded-[10px] border border-[#d8dee6] bg-white/95 pl-[48px] pr-4 text-[14px] text-[#263443] outline-none transition placeholder:text-[#adb5bf] focus:border-[#5a9ee3] focus:ring-2 focus:ring-[#5a9ee3]/15"
                   />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-gray-700 ml-1">비밀번호</label>
+              {/* 비밀번호 */}
+              <div className="mt-[19px]">
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-[13px] font-semibold text-[#495666]"
+                >
+                  비밀번호
+                </label>
+
                 <div className="relative">
-                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
+                  <div className="pointer-events-none absolute left-[16px] top-1/2 -translate-y-1/2 text-[#a0a9b5]">
+                    <LockIcon />
+                  </div>
+
                   <input
-                    type="password"
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="비밀번호를 입력하세요"
                     required
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#3a6bb5] transition-all text-sm placeholder:text-gray-400 text-gray-800"
+                    autoComplete="current-password"
+                    className="h-[51px] w-full rounded-[10px] border border-[#d8dee6] bg-white/95 pl-[48px] pr-[48px] text-[14px] text-[#263443] outline-none transition placeholder:text-[#adb5bf] focus:border-[#5a9ee3] focus:ring-2 focus:ring-[#5a9ee3]/15"
                   />
+
+                  <button
+                    type="button"
+                    aria-label="비밀번호 보기"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-[16px] top-1/2 -translate-y-1/2 text-[#a0a9b5] transition hover:text-[#5b88b9]"
+                  >
+                    <EyeIcon closed={showPassword} />
+                  </button>
                 </div>
               </div>
 
+              {/* 상태 유지 / 비밀번호 */}
+              <div className="mt-[17px] flex items-center justify-between">
+                <label className="flex cursor-pointer items-center gap-2 text-[13px] text-[#606d7b]">
+                  <input
+                    type="checkbox"
+                    className="h-[16px] w-[16px] rounded border-[#bcc5cf] accent-[#267ad0]"
+                  />
+                  로그인 상태 유지
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    alert('비밀번호 변경은 JS ATLAS 관리자에게 문의해주세요 :)')
+                  }
+                  className="text-[13px] font-semibold text-[#2a83db] hover:underline"
+                >
+                  비밀번호 찾기
+                </button>
+              </div>
+
+              {/* 에러 */}
               {errorMsg && (
-                <div className="text-red-500 text-xs text-center font-medium bg-red-50 py-2 rounded-lg border border-red-100">
+                <div className="mt-4 rounded-[8px] border border-red-100 bg-red-50 px-4 py-3 text-center text-[12px] font-medium text-red-500">
                   {errorMsg}
                 </div>
               )}
 
-              <div className="flex items-center justify-between mt-1 px-1">
-                <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
-                  <input type="checkbox" className="w-3.5 h-3.5 rounded border-gray-300 text-[#1e56a0] focus:ring-[#1e56a0]" />
-                  로그인 상태 유지
-                </label>
-              </div>
-
+              {/* 로그인 버튼 */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#1e56a0] hover:bg-[#153e75] text-white font-medium py-3.5 rounded-xl mt-1 transition-all active:scale-95 text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-200 disabled:opacity-50"
+                className="mt-[22px] flex h-[55px] w-full items-center justify-center gap-3 rounded-[10px] bg-gradient-to-r from-[#267bd0] to-[#2d91e6] text-[15px] font-bold text-white shadow-[0_8px_18px_rgba(38,123,208,0.24)] transition hover:-translate-y-[1px] hover:shadow-[0_11px_22px_rgba(38,123,208,0.28)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isLoading ? '로그인 중...' : '로그인'}
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 2L11 13"></path>
-                  <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-                </svg>
+                {isLoading ? (
+                  '로그인 중...'
+                ) : (
+                  <>
+                    로그인
+                    <PlaneIcon className="h-[20px] w-[20px]" strokeWidth={1.8} />
+                  </>
+                )}
               </button>
-            </div>
-            
-            <div className="flex justify-center text-[#a4c2f4] mt-1 mb-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
-            </div>
-          </form>
-        </div>
 
-        {/* 3. 오른쪽 보딩 패스 */}
-        <div className="hidden lg:flex flex-col bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl w-[480px] shrink-0 relative z-10 -rotate-[4deg] transition-transform hover:rotate-0 duration-500 border border-gray-100 overflow-hidden pointer-events-none">
-          <div className="bg-[#3a6bb5] px-6 py-4 flex justify-between items-center text-white relative">
-            <div className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="-rotate-45">
-                <path d="M22 16.92v-1.99l-8.5-5.36V3.5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v6.07L2 14.93v1.99l8.5-2.65v5.33l-2.28 1.71V23l3.28-1 3.28 1v-1.71l-2.28-1.71v-5.33l8.5 2.65z"/>
-              </svg>
-              <span className="font-bold tracking-widest text-base">BOARDING PASS</span>
-            </div>
-            <span className="font-medium text-base pr-2">JS ♡</span>
-            <div className="absolute -bottom-2 right-[125px] w-4 h-4 bg-[#eaf2fb] rounded-full"></div>
-          </div>
+              {/* 회원가입 부분 */}
+              <div className="mt-[28px]">
+                <div className="flex items-center gap-4">
+                  <span className="h-px flex-1 border-t border-dashed border-[#bcd8f4]" />
+                  <span className="text-[13px] text-[#8d9aa7]">
+                    처음이신가요?
+                  </span>
+                  <span className="h-px flex-1 border-t border-dashed border-[#bcd8f4]" />
+                </div>
 
-          <div className="px-7 py-6 flex flex-col relative bg-white">
-            <div className="absolute -bottom-2 right-[125px] w-4 h-4 bg-[#eaf2fb] rounded-full"></div>
-            <div className="flex justify-between items-stretch">
-              <div className="flex flex-col gap-5 flex-1 pr-6">
-                <div className="flex flex-col">
-                  <span className="text-[11px] text-gray-400 mb-0.5 font-bold tracking-widest uppercase">FROM</span>
-                  <span className="text-[22px] font-bold text-gray-800">우리의 오늘</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[11px] text-gray-400 mb-0.5 font-bold tracking-widest uppercase">TO</span>
-                  <span className="text-[22px] font-bold text-gray-800">함께하는 내일</span>
-                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    alert('JS ATLAS는 초대된 사용자만 이용할 수 있어요 ♡')
+                  }
+                  className="mt-[18px] flex h-[50px] w-full items-center justify-center rounded-[9px] border border-[#75ade3] bg-white text-[14px] font-bold text-[#2b83d6] transition hover:bg-[#f2f8ff]"
+                >
+                  회원가입
+                  <span className="absolute" />
+                  <svg
+                    className="absolute ml-[330px] h-[18px] w-[18px]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m14 7 5 5-5 5" />
+                  </svg>
+                </button>
               </div>
-
-              <div className="w-px border-l-[2px] border-dashed border-gray-200 relative right-[20px]"></div>
-
-              <div className="flex flex-col gap-5 w-[100px]">
-                <div className="flex flex-col">
-                  <span className="text-[11px] text-gray-400 mb-0.5 font-bold tracking-widest uppercase">SEAT</span>
-                  <span className="text-xl font-bold text-gray-800">07A</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[11px] text-gray-400 mb-0.5 font-bold tracking-widest uppercase">DATE</span>
-                  <span className="text-xl font-bold text-gray-800">FOREVER</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-6 mt-6 pt-2">
-              <svg width="130" height="26" viewBox="0 0 100 24" fill="#1f2937" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
-                <rect x="0" y="0" width="3" height="24" /><rect x="5" y="0" width="1" height="24" /><rect x="8" y="0" width="4" height="24" /><rect x="14" y="0" width="2" height="24" /><rect x="18" y="0" width="1" height="24" /><rect x="22" y="0" width="5" height="24" /><rect x="29" y="0" width="2" height="24" /><rect x="33" y="0" width="3" height="24" /><rect x="38" y="0" width="1" height="24" /><rect x="42" y="0" width="4" height="24" /><rect x="48" y="0" width="2" height="24" /><rect x="52" y="0" width="1" height="24" /><rect x="55" y="0" width="3" height="24" /><rect x="60" y="0" width="5" height="24" /><rect x="67" y="0" width="2" height="24" /><rect x="71" y="0" width="1" height="24" /><rect x="74" y="0" width="4" height="24" /><rect x="80" y="0" width="3" height="24" /><rect x="85" y="0" width="1" height="24" /><rect x="88" y="0" width="3" height="24" /><rect x="93" y="0" width="2" height="24" /><rect x="97" y="0" width="3" height="24" />
-              </svg>
-              <span className="text-[10px] text-gray-500 font-bold tracking-tighter">
-                MEMORIES WE COLLECT TOGETHER
-              </span>
-            </div>
+            </form>
           </div>
         </div>
+      </section>
 
-      </div>
-    </div>
+      {/* ================= FOOTER ================= */}
+      <footer className="relative z-30 flex h-[62px] shrink-0 items-center justify-between border-t border-[#dbeaf8] bg-white/85 px-6 text-[#708497] md:px-[5%]">
+        <div className="flex items-center gap-3">
+          <PlaneIcon
+            className="h-[28px] w-[28px] text-[#3988d8]"
+            strokeWidth={1.4}
+          />
+
+          <span
+            className={`${dancingScript.className} hidden text-[17px] text-[#71879c] sm:block`}
+          >
+            같이 봐도 지도, 함께면 여행. ♡
+          </span>
+        </div>
+
+        <p className="text-[11px] md:text-[12px]">
+          © 2026 JS ATLAS. All rights reserved.
+        </p>
+      </footer>
+    </main>
   );
 }
