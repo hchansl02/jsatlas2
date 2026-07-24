@@ -36,7 +36,8 @@ export default function LoginPage() {
       }
 
       if (data.session) {
-        router.push('/');
+        router.push('/home');
+        setIsLoading(false); // 이동하면서 로딩 버튼 멈추기
       }
     } catch (err) {
       setErrorMsg('로그인 중 오류가 발생했습니다.');
