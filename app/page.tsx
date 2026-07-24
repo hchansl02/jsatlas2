@@ -37,7 +37,7 @@ export default function LoginPage() {
 
       if (data.session) {
         router.push('/home');
-        setIsLoading(false); // 이동하면서 로딩 버튼 멈추기
+        setIsLoading(false);
       }
     } catch (err) {
       setErrorMsg('로그인 중 오류가 발생했습니다.');
@@ -53,10 +53,10 @@ export default function LoginPage() {
       <div className="absolute top-[10%] right-[5%] w-[300px] md:w-[600px] h-[300px] bg-white/95 blur-[80px] rounded-full pointer-events-none z-0"></div>
       <div className="absolute bottom-[-10%] left-[25%] w-[400px] md:w-[800px] h-[400px] bg-white/90 blur-[90px] rounded-full pointer-events-none z-0"></div>
 
-      {/* 1. 왼쪽 편지 봉투 (모바일에서는 숨기고 PC 화면에서만 표시) */}
+      {/* 1. 왼쪽 편지 봉투 장식 (줄무늬 깨짐 현상 수정 완료) */}
       <div className="absolute top-[65%] -translate-y-1/2 -left-80 xl:-left-56 w-[650px] h-[480px] -rotate-12 z-0 hidden lg:block shadow-2xl pointer-events-none">
         <div className="absolute inset-0 bg-white rounded-2xl overflow-hidden border border-gray-200">
-          <div className="absolute inset-0" style={{ padding: '12px', background: 'repeating-linear-gradient(45deg, #d93838 0, #d93838 16px, white 16px, white 32px, #3a6bb5 32px, #3a6bb5 48px, white 48px, white 64px)' }}>
+          <div className="absolute inset-0 p-3 bg-[#fafafa]">
             <div className="w-full h-full bg-[#fafafa] rounded relative overflow-hidden flex items-center justify-center shadow-inner">
               <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute top-0 left-0 w-full h-[60%] text-gray-300 opacity-50" fill="none" stroke="currentColor" strokeWidth="0.5">
                  <path d="M0,0 L50,100 L100,0" />
@@ -83,9 +83,7 @@ export default function LoginPage() {
       {/* 중앙(로그인) 및 오른쪽(보딩패스) 컨테이너 */}
       <div className="flex flex-row items-center justify-center lg:justify-end gap-16 xl:gap-24 w-full max-w-[1400px] relative z-10 lg:pl-32 xl:pl-40">
         
-        {/* ========================================= */}
-        {/* 2. 중앙 로그인 카드 (모바일 100% 폭 대응) */}
-        {/* ========================================= */}
+        {/* 2. 중앙 로그인 카드 */}
         <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-[420px] p-2 shrink-0">
           <form onSubmit={handleLogin} className="border border-dashed border-[#a4c2f4] rounded-[1.5rem] p-6 md:p-8 flex flex-col gap-5 bg-white/90 backdrop-blur-sm">
             <div className="text-center mt-2">
@@ -141,7 +139,6 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* 에러 메시지 표시 */}
               {errorMsg && (
                 <div className="text-red-500 text-xs text-center font-medium bg-red-50 py-2 rounded-lg border border-red-100">
                   {errorMsg}
@@ -176,9 +173,7 @@ export default function LoginPage() {
           </form>
         </div>
 
-        {/* ========================================= */}
-        {/* 3. 오른쪽 보딩 패스 (모바일에서는 숨김, 태블릿/PC md 이상에서만 표시) */}
-        {/* ========================================= */}
+        {/* 3. 오른쪽 보딩 패스 */}
         <div className="hidden lg:flex flex-col bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl w-[480px] shrink-0 relative z-10 -rotate-[4deg] transition-transform hover:rotate-0 duration-500 border border-gray-100 overflow-hidden pointer-events-none">
           <div className="bg-[#3a6bb5] px-6 py-4 flex justify-between items-center text-white relative">
             <div className="flex items-center gap-2">
