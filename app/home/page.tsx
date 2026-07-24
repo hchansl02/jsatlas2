@@ -225,7 +225,6 @@ function FlightRoute() {
 
 /* ===========================
    카드 이미지
-   지금 이미지는 일단 이것 유지
 =========================== */
 
 function Photo({
@@ -257,6 +256,7 @@ function Photo({
 export default function HomePage() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#dceeff] font-sans">
+
       {/* ================= HEADER ================= */}
 
       <header className="relative z-50 flex h-[72px] shrink-0 items-center border-b border-[#d8e9f7] bg-white/90 px-6 shadow-[0_2px_12px_rgba(44,79,116,0.04)] backdrop-blur-md md:px-[5%]">
@@ -281,6 +281,7 @@ export default function HomePage() {
         }}
       >
         {/* 은은한 지도 라인 */}
+
         <div
           className="pointer-events-none absolute inset-0 z-0 opacity-[0.11]"
           style={{
@@ -290,6 +291,7 @@ export default function HomePage() {
         />
 
         {/* 구름 */}
+
         <div className="pointer-events-none absolute -left-[100px] top-[20px] z-[1] h-[220px] w-[460px] rounded-full bg-white/70 blur-[70px]" />
 
         <div className="pointer-events-none absolute -right-[80px] top-[15px] z-[1] h-[230px] w-[480px] rounded-full bg-white/75 blur-[75px]" />
@@ -331,6 +333,7 @@ export default function HomePage() {
           {/* ================= CARDS ================= */}
 
           <div className="relative z-20 mt-[60px] grid w-full max-w-[1540px] grid-cols-1 gap-5 pb-[78px] md:grid-cols-2 xl:grid-cols-4 2xl:mt-[72px] 2xl:gap-6">
+
             {/* 01 함께 가볼 곳 */}
 
             <Link
@@ -355,9 +358,9 @@ export default function HomePage() {
                 </h2>
 
                 <p className="mt-3 text-[13px] leading-[1.8] text-[#697786] 2xl:text-[14px]">
-                  우리의 버킷리스트와
+                  언젠간 꼭 같이 갈
                   <br />
-                  다음 여행지를 모아두었어요.
+                  수많은 장소들
                 </p>
               </div>
 
@@ -406,9 +409,9 @@ export default function HomePage() {
                 </h2>
 
                 <p className="mt-3 text-[13px] leading-[1.8] text-[#697786] 2xl:text-[14px]">
-                  새로운 경험, 우리를
+                  매일 매일 다양한
                   <br />
-                  더 가깝게 만들어줘요.
+                  콘텐츠를 해보자!
                 </p>
               </div>
 
@@ -462,9 +465,9 @@ export default function HomePage() {
                   </h2>
 
                   <p className="mt-3 text-[13px] leading-[1.8] text-[#697786] 2xl:text-[14px]">
-                    마음이 닿는 편지에
+                    내 마음을 가득 담아
                     <br />
-                    작은 설렘을 담아보세요.
+                    너에게 보낼게
                   </p>
                 </div>
 
@@ -514,9 +517,9 @@ export default function HomePage() {
                 </h2>
 
                 <p className="mt-3 text-[13px] leading-[1.8] text-[#697786] 2xl:text-[14px]">
-                  우리의 추억을 사진과 글로
+                  우리의 추억과
                   <br />
-                  차곡차곡 기록해요.
+                  기록들
                 </p>
               </div>
 
